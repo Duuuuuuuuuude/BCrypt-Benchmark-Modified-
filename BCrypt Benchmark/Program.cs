@@ -1,6 +1,21 @@
 ﻿using System.Diagnostics;
 using BCryptNet = BCrypt.Net.BCrypt;
 
+#region How long to hash. Taken from https://auth0.com/blog/hashing-in-action-understanding-bcrypt/
+Console.WriteLine("Running speed tests:\n");
+string plainTextPassword = "DFGh5546*%^__90";
+
+for (int saltRounds = 10; saltRounds < 21; saltRounds++)
+{
+    Stopwatch sw = Stopwatch.StartNew();
+    BCryptNet.HashPassword(plainTextPassword, saltRounds);
+    Console.WriteLine($"{saltRounds - 9}. test | cost = {saltRounds}, time to hash = {sw.ElapsedMilliseconds}ms");
+}
+Console.WriteLine();
+#endregion
+
+
+
 #region Modified benchmark from https://github.com/BcryptNet/bcrypt.net
 var cost = 16;
 var timeTarget = 400; // Milliseconds
@@ -8,7 +23,7 @@ long timeTaken;
 int iterationsSoFar = 1;
 int iterationsToDo = 10;
 
-Console.WriteLine("Running tests:\n");
+Console.WriteLine("Running Appropriate cost tests:\n");
 do
 {
     do
@@ -65,3 +80,5 @@ Console.ReadLine();
 //Console.WriteLine("Appropriate Cost Found: " + (cost + 1));
 //Console.ReadLine(); 
 #endregion
+
+
